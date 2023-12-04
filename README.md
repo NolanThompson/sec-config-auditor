@@ -30,6 +30,7 @@ Before using the AWS Configuration Analysis Tool, ensure that your system meets 
 - **OpenAI API Key**: Required for using GPT-3.5 or GPT-4 services.
 - **AWS Keys and Information**: AWS access key id, AWS secret access key, and your AWS region.
 - **Network Access**: Internet connection for accessing AWS and OpenAI services.
+- **jq**: Command-line JSON processor (for processing the prompt-config.json file).
 
 ---
 
@@ -40,6 +41,7 @@ Follow these steps to use CloudSec Insight:
 1. **Clone the Repository**:
 
    - Use Git to clone the repository to your local machine:
+
      ```
      git clone git@github.com:NolanThompson/sec-config-auditor.git
      ```
@@ -47,13 +49,54 @@ Follow these steps to use CloudSec Insight:
 2. **Install Dependencies**:
 
    - Navigate to the cloned directory:
+
      ```
      cd sec-config-auditor
      ```
+
    - Install the required Python dependencies to your virtual environment:
+
      ```
      pip install -r requirements.txt
      ```
+
+   - Install `jq`
+     `jq` is a command-line JSON processor required for handling the `prompt-config.json` file. Install it as per your operating system:
+
+   #### For Ubuntu/Debian Linux
+
+   ```bash
+   sudo apt-get update
+   sudo apt-get install jq
+   ```
+
+   #### For CentOS/RHEL Linux
+
+   ```bash
+   sudo yum install jq
+   ```
+
+   #### For Fedora Linux
+
+   ```bash
+   sudo dnf install jq
+   ```
+
+   #### For macOS (using Homebrew)
+
+   ```bash
+   brew install jq
+   ```
+
+   #### For Windows (using Chocolatey)
+
+   Install Chocolatey first from [https://chocolatey.org/install](https://chocolatey.org/install), then run:
+
+   ```bash
+   choco install jq
+   ```
+
+   Alternatively, download the `jq` executable from its [GitHub releases page](https://github.com/stedolan/jq/releases) and add it to your system path.
 
 ---
 
@@ -65,21 +108,36 @@ Follow these steps to use CloudSec Insight:
 
    - Create a `.env` file in the root directory.
    - Add your AWS credentials and OpenAI API key:
+
      ```
      AWS_ACCESS_KEY_ID=your_access_key_id
      AWS_SECRET_ACCESS_KEY=your_secret_access_key
      AWS_DEFAULT_REGION=your_aws_region
-     CHATGPT_KEY=you_chat_gpt_key
+     CHATGPT_KEY=your_chat_gpt_key
      ```
+
+2. **Make the Shell Script Executable**:
+
+   - In the root directory, you'll find the `run_audit.sh` shell script. To make it executable, run the following command while in the directory:
+
+     ```bash
+     chmod +x run_audit.sh
+     ```
+
+   - This command changes the file's mode to allow execution. Once this is done, you can run the script using `./run_audit.sh [flag]`.
 
 ---
 
 ## Usage
 
-To use the CloudSec Inside, enter the `src` directory and run the main.py script. Make sure you've created your environment variables.
+To use the CloudSec Inside, enter run the `./run_audit.sh [flag]`, including the "summary" flag or the "recommendations" flag to select which audit you'd like to perform.
 
 ```
-python main.py
+./run_audit.sh summary
+```
+
+```
+./run_audit.sh recommendations
 ```
 
 ---
@@ -89,8 +147,8 @@ python main.py
 ### Adding New Audit Types
 
 - To add a new prompt for auditing your security information:
-  - Open the `get_response.py` file.
-  - Edit line 24 to meet your criteria for the audit.
+  - Open the `prompt_config.py` file.
+  - Add a new flag as the key and prompt as the value for a new key-value pair in the given JSON.
 
 ### Modifying the rest of the tool
 
@@ -109,9 +167,11 @@ The AWS Configuration Analysis Tool employs `pytest`, a robust testing framework
 
    - To run the tests, navigate to the root directory of the project.
    - Execute the following command:
+
      ```
      pytest
      ```
+
    - `pytest` will automatically discover and execute all test cases in the `tests` directory.
 
 3. **Test Coverage**:
@@ -129,13 +189,17 @@ The AWS Configuration Analysis Tool employs `pytest`, a robust testing framework
 
 ### Common Issues and Solutions
 
-- **Environment Variables Not Set**: Ensure that the `.env` file is correctly configured and that the Python script is reading it properly.
-- **GPT Credits**: Ensure you have GPT credits available for you to use.
-- **AWS Permissions**: Ensure your AWS permissions allow you to use the API to get security information for your organization.
-- **Network Errors**: If you encounter network-related errors, verify your internet connection and access permissions to AWS and OpenAI services.
-- **Dependency Conflicts**: If there are conflicts or issues with Python dependencies, try creating a virtual environment specifically for this project to isolate dependencies.
+- **Environment Variables Not Set**: Confirm that the `.env` file in the root directory is properly configured with your AWS credentials and OpenAI API key. This file should include `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and `CHATGPT_KEY`.
 
----
+- **GPT Credits**: Check if you have sufficient credits for using OpenAI's GPT services. Running out of credits can prevent the tool from functioning correctly.
+
+- **AWS Permissions**: Verify that your AWS credentials have the necessary permissions to access and retrieve security information for your AWS resources. Insufficient permissions can lead to errors in data retrieval.
+
+- **Network Errors**: If you face network-related issues, ensure that your internet connection is stable and that there are no restrictions blocking access to AWS and OpenAI services.
+
+- **Dependency Conflicts**: In case of conflicts with Python dependencies, consider setting up a virtual environment specifically for this project. This isolates the project dependencies from your global Python environment and can resolve conflicts.
+
+- **Shell Script Execution**: If the `run_audit.sh` script is not running, check that it has been made executable. You can do this by running `chmod +x run_audit.sh` in the root directory of the project.
 
 ## Best Practices
 
