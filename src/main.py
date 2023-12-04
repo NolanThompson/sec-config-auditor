@@ -17,6 +17,14 @@ def loading_spinner(stop_flag):
             time.sleep(delay)
 
 def main():
+    # Check for required environment variables
+    required_vars = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_DEFAULT_REGION", "CHATGPT_KEY"]
+    missing_vars = [var for var in required_vars if not os.getenv(var)]
+
+    if missing_vars:
+        print(f"Missing environment variables: {', '.join(missing_vars)}. Please set them in your .env file.")
+        return
+        
     loading_stop_flag = threading.Event()
     loading_thread = threading.Thread(target=loading_spinner, args=(loading_stop_flag,))
     loading_thread.start()
