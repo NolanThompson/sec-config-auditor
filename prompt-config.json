@@ -1,0 +1,4 @@
+{
+  "summary": "Please analayze this configuration and summarize the current security configurations in a way that will help the AWS org understand the current state of their security. This summary should be as detailed as possible and should include any and all security issues that you find.",
+  "recommendations": "Please analyze this configuration and make some recommendations based off of it that will help enhance the overall security of this AWS org. These recommendations can be as specific or as general as need be. The overall goal is to enhance the AWS org's security"
+}
