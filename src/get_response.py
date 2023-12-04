@@ -16,12 +16,12 @@ def chat_completion(prompt):
     answer = response.choices[0].message.content
     return answer
 
-def get_analysis():
+def get_analysis(custom_prompt):
     #fetch config
-    summary_prompt = get_org_config_summary()
+    config_summary = get_org_config_summary()
 
     #prompt
-    prompt = f"Here is an AWS organization config summary: {summary_prompt}. Please analyze this configuration and make some recommendations based off of it that will help enhance the overall security of this AWS org. These recommendations can be as specific or as general as need be. The overall goal is to enhance the AWS org's security."
+    prompt = f"Here is an AWS organization config summary: {config_summary}. {custom_prompt}"
 
     response = chat_completion(prompt)
     print(f"\n\nConfig Analysis: {response}\n\n")
