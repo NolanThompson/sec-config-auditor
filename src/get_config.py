@@ -2,15 +2,15 @@ import boto3
 import os
 
 def get_org_config_summary():
-    #fetch creds
-    aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
-    aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-    aws_region = os.getenv('AWS_DEFAULT_REGION')
-
-    aws_config_client = boto3.client('config', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=aws_region)
-
 
     try:
+        #fetch creds
+        aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
+        aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+        aws_region = os.getenv('AWS_DEFAULT_REGION')
+
+        aws_config_client = boto3.client('config', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=aws_region)
+
         #fetch response
         response = aws_config_client.describe_configuration_aggregators()
 
@@ -40,7 +40,7 @@ def get_org_config_summary():
 if __name__ == "__main__":
     org_config_summary = get_org_config_summary()
 
-    #we can edit to make payload more meaningful if needed
+    #can edit to make payload more meaningful if needed
     if org_config_summary:
         print("Organization Configuration Summary:")
         print(f"Number of Config Aggregators: {org_config_summary['num_config_aggregators']}")
