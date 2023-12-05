@@ -51,3 +51,40 @@ def test_get_org_config_summary_exception(mock_boto_client):
     """
     result = get_org_config_summary()
     assert result is None
+
+def mock_azure_resource_management_client(*args, **kwargs):
+    mock_client = Mock()
+    mock_client.resource_groups.list.return_value = [
+        Mock(name='ResourceGroup1'),
+        Mock(name='ResourceGroup2')
+    ]
+    return mock_client
+
+
+@patch('get_org_config_summary.DefaultAzureCredential')
+@patch('get_org_config_summary.ResourceManagementClient', new=mock_azure_resource_management_client)
+@patch.dict(os.environ, {
+    'AZURE_SUBSCRIPTION_ID': 'test_subscription_id'
+})
+def test_get_org_config_summary_azure_success(mock_azure_credential):
+    """
+    Test to ensure get_org_config_summary fetches correct data from Azure.
+    """
+    result = get_org_config_summary('azure')
+
+    assert result is not None
+    assert result['num_resource_groups'] == 2
+    assert result['resource_groups'] == ['ResourceGroup1', 'ResourceGroup2']
+
+
+@patch('get_org_config_summary.DefaultAzureCredential')
+@patch('get_org_config_summary.ResourceManagementClient', side_effect=Exception("Test Exception"))
+@patch.dict(os.environ, {
+    'AZURE_SUBSCRIPTION_ID': 'test_subscription_id'
+})
+def test_get_org_config_summary_azure_exception(mock_azure_credential):
+    """
+    Test to handle exceptions in get_org_config_summary for Azure.
+    """
+    result = get_org_config_summary('azure')
+    assert result is None

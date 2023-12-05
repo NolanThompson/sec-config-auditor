@@ -34,5 +34,19 @@ def test_get_analysis_called(mock_get_analysis):
     with patch('threading.Thread') as mock_thread:
         # Mocking threading.Thread to prevent actual thread creation
         main.main()  # Call the main function directly
-        mock_get_analysis.assert_called_once()
+        mock_get_analysis.assert_called_once("Are there security implications with this config?",
+                                                      'aws')
         mock_thread.assert_called_once()  # Assert that a thread was initiated
+
+@patch('main.get_analysis')
+def test_get_analysis_called_azure(mock_get_analysis):
+    """
+    Test to ensure get_analysis function is called within main's execution for Azure.
+    """
+    with patch('sys.argv', new=['main.py', 'azure']):  # Provide 'azure' as the command line argument
+        with patch('threading.Thread') as mock_thread:
+            # Mocking threading.Thread to prevent actual thread creation
+            main.main()  # Call the main function directly
+            mock_get_analysis.assert_called_once_with("Are there security implications with this config?",
+                                                      'azure')
+            mock_thread.assert_called_once()  # Assert that a thread was initiated
