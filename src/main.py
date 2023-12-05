@@ -20,6 +20,7 @@ def loading_spinner(stop_flag):
 def main():
     # Get the prompt from command line argument
     cloud_provider = sys.argv[1] if len(sys.argv) > 1 else None
+    custom_prompt = sys.argv[2] if len(sys.argv) > 2 else None
 
     # Check for required environment variables
     required_vars_aws = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_DEFAULT_REGION", "CHATGPT_KEY"]
@@ -42,7 +43,6 @@ def main():
     loading_thread.start()
 
     #fetch config analysis
-    custom_prompt = "Are there security implications of this config?"
     get_analysis(custom_prompt, cloud_provider)
 
     loading_stop_flag.set()
