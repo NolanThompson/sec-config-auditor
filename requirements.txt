@@ -2,3 +2,5 @@ openai==0.28
 boto3==1.29.1
 pytest==7.4.0
 python-dotenv
+azure-identity
+azure-mgmt-resource
