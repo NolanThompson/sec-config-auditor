@@ -30,6 +30,7 @@ Before using the AWS Configuration Analysis Tool, ensure that your system meets 
 - **OpenAI API Key**: Required for using GPT-3.5 or GPT-4 services.
 - **AWS Keys and Information**: AWS access key id, AWS secret access key, and your AWS region.
 - **Network Access**: Internet connection for accessing AWS and OpenAI services.
+- **Azure Key**: Azure ID key
 - **jq**: Command-line JSON processor (for processing the prompt-config.json file).
 
 ---
@@ -114,6 +115,7 @@ Follow these steps to use CloudSec Insight:
      AWS_SECRET_ACCESS_KEY=your_secret_access_key
      AWS_DEFAULT_REGION=your_aws_region
      CHATGPT_KEY=your_chat_gpt_key
+     AZURE_SUBSCRIPTION_ID=your_azure+subscription_id
      ```
 
 2. **Make the Shell Script Executable**:
@@ -130,14 +132,14 @@ Follow these steps to use CloudSec Insight:
 
 ## Usage
 
-To use the CloudSec Inside, enter run the `./run_audit.sh [flag]`, including the "summary" flag or the "recommendations" flag to select which audit you'd like to perform.
+To use the CloudSec Inside, enter run the `./run_audit.sh [provider] [flag]`, including the "summary" flag or the "recommendations" flag to select which audit you'd like to perform and the "aws" or "azure" flag for which provider you'd like to use.
 
 ```
-./run_audit.sh summary
+./run_audit.sh aws summary
 ```
 
 ```
-./run_audit.sh recommendations
+./run_audit.sh azure recommendations
 ```
 
 ---
