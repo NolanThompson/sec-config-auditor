@@ -19,11 +19,19 @@ def loading_spinner(stop_flag):
 
 def main():
     # Get the prompt from command line argument
-    custom_prompt = sys.argv[1] if len(sys.argv) > 1 else None
+    cloud_provider = sys.argv[1] if len(sys.argv) > 1 else None
 
     # Check for required environment variables
-    required_vars = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_DEFAULT_REGION", "CHATGPT_KEY"]
-    missing_vars = [var for var in required_vars if not os.getenv(var)]
+    required_vars_aws = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_DEFAULT_REGION", "CHATGPT_KEY"]
+    required_vars_azure = ["AZURE_SUBSCRIPTION_ID", "CHATGPT_KEY"]
+
+    if cloud_provider == 'aws':
+        missing_vars = [var for var in required_vars_aws if not os.getenv(var)]
+    elif cloud_provider == 'azure':
+        missing_vars = [var for var in required_vars_azure if not os.getenv(var)]
+    else:
+        print("Invalid cloud provider specified.")
+        return
 
     if missing_vars:
         print(f"Missing environment variables: {', '.join(missing_vars)}. Please set them in your .env file.")
@@ -34,7 +42,8 @@ def main():
     loading_thread.start()
 
     #fetch config analysis
-    get_analysis(custom_prompt)
+    custom_prompt = "Are there security implications of this config?"
+    get_analysis(custom_prompt, cloud_provider)
 
     loading_stop_flag.set()
     loading_thread.join()
